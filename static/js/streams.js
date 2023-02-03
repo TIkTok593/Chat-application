@@ -1,6 +1,6 @@
 const APP_ID = 'e7c109abcd98417fbc2feef4f282bfbe'
-const CHANNEL = 'main'
-const TOKEN = '007eJxTYHgfbFPielHc/nMb6y4/0w/F53rncjnUTDS88vFh2b5L3Q8VGFLNkw0NLBOTklMsLUwMzdOSko3SUlPTTNKMLIyS0pJSJ9XcTm4IZGRwLuhiZWSAQBCfhSE3MTOPgQEA5G4iHA=='
+const CHANNEL = 'islam'
+const TOKEN = '007eJxTYBD5MWv59hvqokmnpqd5Kp7fOdFd97vB9a1b/NexX/j+05xZgSHVPNnQwDIxKTnF0sLE0DwtKdkoLTU1zSTNyMIoKS0p1c/jbnJDICPDK0slBkYoBPFZGTKLcxJzGRgA66MhpA=='
 let UID;
 const client = AgoraRTC.createClient({mode: 'rtc', codec: 'vp8'})
 
