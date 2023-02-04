@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 shell = "*"
 django = "*"
+agora-token-builder = "*"
 
 [dev-packages]
 

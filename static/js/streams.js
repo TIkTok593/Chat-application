@@ -1,7 +1,7 @@
 const APP_ID = 'e7c109abcd98417fbc2feef4f282bfbe'
-const CHANNEL = 'islam'
-const TOKEN = '007eJxTYBD5MWv59hvqokmnpqd5Kp7fOdFd97vB9a1b/NexX/j+05xZgSHVPNnQwDIxKTnF0sLE0DwtKdkoLTU1zSTNyMIoKS0p1c/jbnJDICPDK0slBkYoBPFZGTKLcxJzGRgA66MhpA=='
-let UID;
+const CHANNEL = 'kasdfj'
+const TOKEN = '006e7c109abcd98417fbc2feef4f282bfbeIACDvcChoP0nRAFEoA3mmf4Zll7anC6vjNWFEUePNKYxhC4oN9/wa+luIgCB+ToDMB/gYwQAAQAwH+BjAgAwH+BjAwAwH+BjBAAwH+Bj'
+let UID = 94;
 const client = AgoraRTC.createClient({mode: 'rtc', codec: 'vp8'})
 
 let localTracks = []
@@ -12,7 +12,7 @@ let joinAndDisplayLocalStream = async () => {
     client.on('user-published', handledUserJoined)
     client.on('user-left', handledUserLeft)
 
-    UID = await client.join(APP_ID, CHANNEL, TOKEN, null)  // here we should provide user id (uid), but because we don't have one we put null instead, and this function will geneare a one for us(uid)
+    await client.join(APP_ID, CHANNEL, TOKEN, UID)  // here we should provide user id (uid), but because we don't have one we put null instead, and this function will geneare a one for us(uid)
 
     localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();  // I think this one that ask you for permission for camera and audio
     
@@ -54,4 +54,37 @@ let handledUserLeft = async (user) => {
     document.getElementById(`user-container-${user.uid}`).remove()
 }
 
+let leaveAndRemoveLocalStream = async () => {
+    for (let i = 0; localTracks.length > i; i++) {
+        localTracks[i].stop()
+        localTracks[i].close()
+    }
+
+    await client.leave()
+    window.open('/chat', '_self') // _self opens this window in this tab.
+}
+
+let toggleCamera = async (e) => {
+    if(localTracks[1].muted){
+        await localTracks[1].setMuted(false)
+        e.target.style.backgroundColor = '#fff'
+    }
+    else{
+        await localTracks[1].setMuted(true)
+        e.target.style.backgroundColor = 'rgb(255, 80, 80, 1)'
+    }
+}
+let toggleMic= async (e) => {
+    if(localTracks[0].muted){
+        await localTracks[0].setMuted(false)
+        e.target.style.backgroundColor = '#fff'
+    }
+    else{
+        await localTracks[0].setMuted(true)
+        e.target.style.backgroundColor = 'rgb(255, 80, 80, 1)'
+    }
+}
 joinAndDisplayLocalStream()
+document.getElementById('leave-btn').addEventListener('click', leaveAndRemoveLocalStream)
+document.getElementById('camera-btn').addEventListener('click', toggleCamera)
+document.getElementById('mic-btn').addEventListener('click', toggleMic)
