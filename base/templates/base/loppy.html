@@ -5,12 +5,18 @@
 <main>
     <section id="form-container">
         <img id="logo" src="{% static 'images/chat-icon.png' %}">
-        <div>
+        <div id="welcome-message">
             <h1>Islamic Chat</h1>
             <p>You can share everything here with respect to Islam roles</p>
         </div>
     
         <form id="form">
+            <div class="form-field">
+                <input type="text" name="username" placeholder="Enter a name..." style="text-transform: uppercase;">
+            </div>
+            <div class="form-field">
+                <input type="text" name="room" placeholder="Enter a room name..." style="text-transform: uppercase;">
+            </div>
             <div class="form-field">
                 <input type="submit" value="Join Stream">
             </div>
@@ -23,8 +29,21 @@
 
 <script type="text/javascript">
     let form = document.getElementById('form')
-    let handleSubmit = async (e) => {
+    let handleSubmit = async (e) => { // e is the object of form
         e.preventDefault()
+        let room = e.target.room.value.toUpperCase() //room is the name of of a text in the html in the upper, value is the value of this form
+        let name = e.target.username.value
+
+        let response = await fetch(`get-token?channel=${room}`)
+        let data = await response.json()
+        let uid = data.uid
+        let token = data.token
+
+        // Now, we'll store the items in the session storage
+        sessionStorage.setItem('UID', uid)
+        sessionStorage.setItem('token', token)
+        sessionStorage.setItem('room', room)
+        sessionStorage.setItem('name', name)
         window.open('room/', '_self')  // _self => open this window on this tab
     }
     form.addEventListener('submit', handleSubmit)

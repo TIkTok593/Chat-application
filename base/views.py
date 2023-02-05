@@ -4,8 +4,12 @@ from agora_token_builder import RtcTokenBuilder
 from django.http import JsonResponse
 import random
 import time
+import json
 
+from .models import RoomMember
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 def getToken(request):
     app_id = 'e7c109abcd98417fbc2feef4f282bfbe'
     app_certificate = '4eee4eceafc04121aa69a6eb930adcdb'
@@ -26,3 +30,21 @@ class LoppyView(ListView):
 class RoomView(ListView):
     def get(self, request):
         return render(request, 'base/room.html')
+    
+@method_decorator(csrf_exempt, name='dispatch')
+class CreateMember(ListView):
+    # @method_decorator(csrf_exempt)
+    # def dispatch(self, request, *args, **kwargs):
+    #     return super(UserCreate, self).dispatch(request, *args, **kwargs)
+    def post(self, request):
+        print('sdfkaj   ')
+        data = json.loads(request.body) # parse the data
+        print('sdfkaj   ')
+        
+        member, created = RoomMember.objects.get_or_create(
+            name = data['name'],
+            uid = data['UID'],
+            room_name = data['room_name']
+        )
+        print('sdfkaj   ')
+        return JsonResponse({'name':data['name']}, safe=False)

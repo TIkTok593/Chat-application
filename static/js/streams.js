@@ -1,23 +1,37 @@
 const APP_ID = 'e7c109abcd98417fbc2feef4f282bfbe'
-const CHANNEL = 'kasdfj'
-const TOKEN = '006e7c109abcd98417fbc2feef4f282bfbeIACDvcChoP0nRAFEoA3mmf4Zll7anC6vjNWFEUePNKYxhC4oN9/wa+luIgCB+ToDMB/gYwQAAQAwH+BjAgAwH+BjAwAwH+BjBAAwH+Bj'
-let UID = 94;
+
+//because we stored our values in the session storage, we can retreive them
+const CHANNEL = sessionStorage.getItem('room');
+const TOKEN = sessionStorage.getItem('token');
+let UID = Number(sessionStorage.getItem('UID'));
+let NAME = sessionStorage.getItem('name')
+
 const client = AgoraRTC.createClient({mode: 'rtc', codec: 'vp8'})
 
 let localTracks = []
 let remoteUsers = {}
 
 let joinAndDisplayLocalStream = async () => {
+    document.getElementById('room-name').innerText = CHANNEL
 
     client.on('user-published', handledUserJoined)
     client.on('user-left', handledUserLeft)
 
-    await client.join(APP_ID, CHANNEL, TOKEN, UID)  // here we should provide user id (uid), but because we don't have one we put null instead, and this function will geneare a one for us(uid)
+    try{
+        await client.join(APP_ID, CHANNEL, TOKEN, UID)  // here we should provide user id (uid), but because we don't have one we put null instead, and this function will geneare a one for us(uid)
+
+    }catch(error){
+        console.log(error)
+        window.open('/chat', '_self')
+    }
 
     localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();  // I think this one that ask you for permission for camera and audio
-    
+    console.log('hello')
+    let member = createMember()
+    console.log('hello')
+
     let player = `<div class="video-container" id="user-container-${UID}">
-                    <div class="username-wrapper"><span class="user-name">my name</span></div>
+                    <div class="username-wrapper"><span class="user-name">${member.name}</span></div>
                     <div class="video-player" id="user-${UID}"></div>
                   </div>`;
     document.getElementById('video-streams').insertAdjacentHTML('beforeend', player);
@@ -83,6 +97,17 @@ let toggleMic= async (e) => {
         await localTracks[0].setMuted(true)
         e.target.style.backgroundColor = 'rgb(255, 80, 80, 1)'
     }
+}
+let createMember = async () => {
+    let response = await fetch('/chat/create-member/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'name': NAME, 'room_name': CHANNEL, 'UID': UID})
+    })
+    let member = await response.json()
+    return member
 }
 joinAndDisplayLocalStream()
 document.getElementById('leave-btn').addEventListener('click', leaveAndRemoveLocalStream)

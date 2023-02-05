@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Roboto&family=Work+Sans:wght@200;300;400;500;600;700;800&display=swap');
 /* Global Styling */
 :root {
     --shaddow:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);
@@ -5,8 +6,9 @@
 /*  */
 body {
     background-color: rgba(232, 233, 239, 1);
+    font-family: 'Roboto', sans-serif;
 }
-
+/* loppy Styling */
 #logo {
     display: block;
     width: 100px;
@@ -25,8 +27,57 @@ body {
     transform: translate(-50%, -50%);
 }
 
+#welcome-message{
+    text-align: center;
+    margin: 20px;
 
+}
+#welcome-message h1{
+    font-size: 36px;
+}
+#welcome-message p{
+    font-size: 16px;
+}
+
+.form-field {
+    margin: 20px;
+}
+
+
+.form-field label{
+    font-size: 16px;
+    line-height: 1.7em;
+}
+
+
+.form-field input{
+    width: 100%;
+    border: 2px solid rgba(198, 202, 219, 1);
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.form-field input[type='submit']{
+    background-color: rgba(75, 93, 172, 1);
+    border: none;
+    color: white;
+}
+
+@media screen and (max-width: 450px) {
+    #form-container {
+        width: 95%;
+    }
+    #welcome-message h1 {
+        font-size: 24px;
+    }
+}
 /* Room Styling */
+
+#room-name-wrapper {
+    text-align: center;
+    font-size: 18px;
+}
 
 #video-streams{
     display: flex;
@@ -45,6 +96,7 @@ body {
     border-radius: 15px;
     margin: 2px;
     background-color: rgba(198, 202, 219, 1);
+    position: relative;
 }
 
 .video-player{
@@ -52,7 +104,28 @@ body {
     height: 100%;
 }
 
+.video-player > * {
+    border-radius: 5px;
+}
 
+.username-wrapper {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: white;
+}
+
+@media screen and (max-width: 1650px) {
+    .video-container {
+        flex-basis: 300px;
+        min-height: 200px;
+    }
+}
 
 #controls-wrapper{
     display: flex;
@@ -62,7 +135,7 @@ body {
     padding: 5px 20px;
     position: fixed;
     bottom:50px;
-
+    /* position: absolute; */
 
 }
 
