@@ -36,15 +36,36 @@ class CreateMember(ListView):
     # @method_decorator(csrf_exempt)
     # def dispatch(self, request, *args, **kwargs):
     #     return super(UserCreate, self).dispatch(request, *args, **kwargs)
+    def get(self, request):
+        uid = request.GET.get('uid')
+        room_name = request.GET.get('room_name')
+        member = RoomMember.objects.get(
+            uid = uid,
+            room_name = room_name,
+        )
+        name = member.name
+        return JsonResponse({'name': member.name}, safe= False)
+    
     def post(self, request):
-        print('sdfkaj   ')
+        # print('sdfkaj   ')
         data = json.loads(request.body) # parse the data
-        print('sdfkaj   ')
+        # print('sdfkaj   ')
         
         member, created = RoomMember.objects.get_or_create(
             name = data['name'],
             uid = data['UID'],
             room_name = data['room_name']
         )
-        print('sdfkaj   ')
+        # print('sdfkaj   ')
         return JsonResponse({'name':data['name']}, safe=False)
+
+
+# @csrf_exempt
+# def createMember(request):
+#     data = json.loads(request.body) # parse the data
+#     member, created = RoomMember.objects.get_or_create(
+#         name = data['name'],
+#         uid = data['UID'],
+#         room_name = data['room_name']
+#     )
+#     return JsonResponse({'name':data['name']}, safe=False)

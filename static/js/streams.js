@@ -26,9 +26,8 @@ let joinAndDisplayLocalStream = async () => {
     }
 
     localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();  // I think this one that ask you for permission for camera and audio
-    console.log('hello')
-    let member = createMember()
-    console.log('hello')
+    let member = await createMember()
+    console.log('member', member)
 
     let player = `<div class="video-container" id="user-container-${UID}">
                     <div class="username-wrapper"><span class="user-name">${member.name}</span></div>
@@ -51,8 +50,9 @@ let handledUserJoined = async (user, mediaType) => {
         if(player != null){
             player.remove()
         }
+        let member = await getMember(user)
         player = `<div class="video-container" id="user-container-${user.uid}">
-        <div class="username-wrapper"><span class="user-name">my name</span></div>
+        <div class="username-wrapper"><span class="user-name">${member.name}</span></div>
         <div class="video-player" id="user-${user.uid}"></div>
       </div>`;
         document.getElementById('video-streams').insertAdjacentHTML('beforeend', player);
@@ -106,6 +106,12 @@ let createMember = async () => {
         },
         body: JSON.stringify({'name': NAME, 'room_name': CHANNEL, 'UID': UID})
     })
+    let member = await response.json()
+    return member
+}
+
+let getMember = async () => {
+    let response = await fetch(`/chat/get-member/?UID=${user.uid}&room_name=${CHANNEL}`)
     let member = await response.json()
     return member
 }
